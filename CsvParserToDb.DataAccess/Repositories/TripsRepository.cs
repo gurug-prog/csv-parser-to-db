@@ -12,18 +12,19 @@ public class TripsRepository : ITripsRepository
         _connectionString = connectionString;
     }
 
-    public async Task<int> BulkInsertFromCsv(string csvFilePath)
+    public async Task<int> BulkInsertFromCsv(string csvFilePath, string formatFile)
     {
         int result = 0;
         try
         {
             using var connection = new SqlConnection(_connectionString);
-            connection.Open();
+            await connection.OpenAsync();
 
             var bulkInsertCommand = $@"
                 BULK INSERT Trips
-                FROM '{csvFilePath}'
+                FROM '{Path.GetFullPath(csvFilePath)}'
                 WITH (
+                    FORMATFILE = '{Path.GetFullPath(formatFile)}',
                     FIRSTROW = 2,
                     FIELDTERMINATOR = ',',
                     ROWTERMINATOR = '\n',
@@ -34,7 +35,7 @@ public class TripsRepository : ITripsRepository
             using var command = new SqlCommand(bulkInsertCommand, connection);
             result = await command.ExecuteNonQueryAsync();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // TODO: logging
             throw;
@@ -49,7 +50,7 @@ public class TripsRepository : ITripsRepository
         try
         {
             using var connection = new SqlConnection(_connectionString);
-            connection.Open();
+            await connection.OpenAsync();
 
             var query = @"
                 SELECT PULocationID, AVG(tip_amount) AS AverageTip
@@ -65,7 +66,7 @@ public class TripsRepository : ITripsRepository
                 result = reader.GetInt32(0);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // TODO: logging
             throw;
@@ -80,7 +81,7 @@ public class TripsRepository : ITripsRepository
         try
         {
             using var connection = new SqlConnection(_connectionString);
-            connection.Open();
+            await connection.OpenAsync();
 
             var query = $@"
                 SELECT TOP {topCount} fare_amount
@@ -95,7 +96,7 @@ public class TripsRepository : ITripsRepository
                 result.Add(fareAmout);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // TODO: logging
             throw;
@@ -110,7 +111,7 @@ public class TripsRepository : ITripsRepository
         try
         {
             using var connection = new SqlConnection(_connectionString);
-            connection.Open();
+            await connection.OpenAsync();
 
             var query = $@"
                 SELECT TOP {topCount} fare_amount,
@@ -126,7 +127,7 @@ public class TripsRepository : ITripsRepository
                 result.Add(fareAmout);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // TODO: logging
             throw;
@@ -141,7 +142,7 @@ public class TripsRepository : ITripsRepository
         try
         {
             using var connection = new SqlConnection(_connectionString);
-            connection.Open();
+            await connection.OpenAsync();
 
             var query = @"
                 SELECT *
@@ -183,6 +184,4 @@ public class TripsRepository : ITripsRepository
             TipAmount = reader.GetDouble(9)
         };
     }
-
-
 }

@@ -4,9 +4,14 @@ namespace CsvParserToDb.DataAccess.Factories;
 
 public class DefaultRepositoryFactory : IRepositoryFactory
 {
+    private readonly string _connectionString;
+    public DefaultRepositoryFactory(string connectionString)
+    {
+        _connectionString = connectionString;
+    }
+
     public ITripsRepository CreateTripsRepository()
     {
-        string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;Database=TestTaskDb;Trusted_Connection=True;";
-        return new TripsRepository(connectionString);
+        return new TripsRepository(_connectionString);
     }
 }

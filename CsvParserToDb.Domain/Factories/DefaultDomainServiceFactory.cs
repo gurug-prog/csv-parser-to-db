@@ -6,19 +6,15 @@ namespace CsvParserToDb.Domain.Factories;
 public class DefaultDomainServiceFactory : IDomainServiceFactory
 {
     private readonly string _datasetFilePath;
-    private readonly string _duplicatesFilePath;
 
-    public DefaultDomainServiceFactory(
-        string datasetFilePath,
-        string duplicatesFilePath)
+    public DefaultDomainServiceFactory(string datasetFilePath)
     {
         _datasetFilePath = datasetFilePath;
-        _duplicatesFilePath = duplicatesFilePath;
     }
 
     public CsvParserDomainService CreateCsvParser()
     {
         var comparer = new TripDuplicateEqualityComparer();
-        return new CsvParserDomainService(comparer, _datasetFilePath, _duplicatesFilePath);
+        return new CsvParserDomainService(comparer, _datasetFilePath);
     }
 }

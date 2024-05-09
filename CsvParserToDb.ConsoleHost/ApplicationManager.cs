@@ -18,14 +18,14 @@ public class ApplicationManager
         _csvParserService = domainServiceFactory.CreateCsvParser();
     }
 
-    public async Task<int> BulkInsertData(string csvFilePath)
+    public async Task<int> BulkInsertData(string csvFilePath, string formatFile)
     {
-        return await _tripsRepository.BulkInsertFromCsv(csvFilePath);
+        return await _tripsRepository.BulkInsertFromCsv(csvFilePath, formatFile);
     }
 
-    public async Task<int> RemoveDuplicates()
+    public async Task<int> RemoveDuplicates(string outputDuplicates)
     {
-        return await _csvParserService.RemoveDuplicates();
+        return await _csvParserService.RemoveDuplicates(outputDuplicates);
     }
 
     //public async Task<int> FindPuLocationIdWithHighestAvgTipAmount()

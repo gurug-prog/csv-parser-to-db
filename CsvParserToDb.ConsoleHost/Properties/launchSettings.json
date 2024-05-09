@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CsvParserToDb.ConsoleHost": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\projects\\csv-parser-to-db\\CsvParserToDb.ConsoleHost"
+    }
+  }
+}
