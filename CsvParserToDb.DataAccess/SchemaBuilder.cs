@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Reflection;
 
 
 namespace CsvParserToDb.DataAccess;
@@ -8,8 +9,11 @@ public class SchemaBuilder
     public const string CONNECTION_STRING =
         @"Server=(LocalDB)\MSSQLLocalDB;Trusted_Connection=True;";
 
+    //private static readonly string SCRIPTS_PATH =
+    //    Path.Combine(Directory.GetCurrentDirectory(), "..", "CsvParserToDb.DataAccess", "Scripts");
+
     private static readonly string SCRIPTS_PATH =
-        Path.Combine(Directory.GetCurrentDirectory(), "..", "CsvParserToDb.DataAccess", "Scripts");
+        Path.Combine(Assembly.GetExecutingAssembly().Location);
 
     public void CreateDatabaseSchema()
     {

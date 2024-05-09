@@ -2,4 +2,5 @@
 
 public interface ITripsRepository
 {
+    void BulkInsert();
 }

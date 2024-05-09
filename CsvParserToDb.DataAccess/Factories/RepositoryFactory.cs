@@ -8,9 +8,4 @@ public class RepositoryFactory : IRepositoryFactory
     {
         return new TripsRepository();
     }
-
-    //public ITripsRepository CreateTripsRepository()
-    //{
-    //    return new TripsRepository();
-    //}
 }
