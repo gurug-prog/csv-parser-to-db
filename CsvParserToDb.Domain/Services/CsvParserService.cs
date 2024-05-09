@@ -1,7 +1,7 @@
 ﻿using CsvHelper.Configuration;
 using CsvHelper;
 using System.Globalization;
-using CsvParserToDb.Domain.Entities;
+using CsvParserToDb.Domain.Shared.Entities;
 
 namespace CsvParserToDb.Domain.Services;
 

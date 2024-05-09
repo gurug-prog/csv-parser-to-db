@@ -5,15 +5,18 @@ namespace CsvParserToDb.ConsoleHost;
 
 public class Program
 {
-    public static void Main()
+    public static void Main(string args[])
     {
-        var schemaBuilder = new SchemaBuilder();
-        schemaBuilder.CreateDatabaseSchema();
-        schemaBuilder.CreateTripsTable();
+        if (args[0] == "--initdb")
+        {
+            var schemaBuilder = new SchemaBuilder();
+            schemaBuilder.CreateDatabaseSchema();
+            schemaBuilder.CreateTripsTable();
+        }
 
-        var repositoryFactory = new RepositoryFactory();
-        var applicationManager = new ApplicationManager(repositoryFactory);
+        //var repositoryFactory = new RepositoryFactory();
+        //var applicationManager = new ApplicationManager(repositoryFactory);
 
-        
+
     }
 }

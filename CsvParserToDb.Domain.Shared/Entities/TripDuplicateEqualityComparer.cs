@@ -1,4 +1,4 @@
-﻿namespace CsvParserToDb.Domain.Entities;
+﻿namespace CsvParserToDb.Domain.Shared.Entities;
 
 public class TripDuplicateEqualityComparer : IEqualityComparer<TripEntity>
 {

@@ -1,6 +1,10 @@
-﻿namespace CsvParserToDb.DataAccess.Repositories;
+﻿using CsvParserToDb.Domain.Shared.Entities;
+
+namespace CsvParserToDb.DataAccess.Repositories;
 
 public interface ITripsRepository
 {
-    void BulkInsert();
+    Task<int> BulkInsertFromCsv(string csvFilePath);
+    Task<IEnumerable<TripEntity>> Search(int puLocationId);
+
 }

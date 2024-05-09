@@ -1,24 +1,29 @@
 ﻿using System.Data.SqlClient;
-using System.Reflection;
 
 
 namespace CsvParserToDb.DataAccess;
 
 public class SchemaBuilder
 {
-    public const string CONNECTION_STRING =
-        @"Server=(LocalDB)\MSSQLLocalDB;Trusted_Connection=True;";
+    private readonly string _connectionString;
+    private readonly string _scriptsPath;
 
-    //private static readonly string SCRIPTS_PATH =
-    //    Path.Combine(Directory.GetCurrentDirectory(), "..", "CsvParserToDb.DataAccess", "Scripts");
+    public SchemaBuilder()
+    {
+        _connectionString = @"Server=(LocalDB)\MSSQLLocalDB;Trusted_Connection=True;";
+        _scriptsPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "CsvParserToDb.DataAccess", "Scripts");
+    }
 
-    private static readonly string SCRIPTS_PATH =
-        Path.Combine(Assembly.GetExecutingAssembly().Location);
+    public SchemaBuilder(string connectionString, string scriptsPath)
+    {
+        _connectionString = connectionString;
+        _scriptsPath = scriptsPath;
+    }
 
     public void CreateDatabaseSchema()
     {
-        var sqlQuery = File.ReadAllText(Path.Combine(SCRIPTS_PATH, "CreateTestTaskDb.sql"));
-        using var connection = new SqlConnection(CONNECTION_STRING);
+        var sqlQuery = File.ReadAllText(Path.Combine(_scriptsPath, "CreateTestTaskDb.sql"));
+        using var connection = new SqlConnection(_connectionString);
         connection.Open();
 
         using var command = new SqlCommand(sqlQuery, connection);
@@ -28,8 +33,8 @@ public class SchemaBuilder
 
     public void CreateTripsTable()
     {
-        var sqlQuery = File.ReadAllText(Path.Combine(SCRIPTS_PATH, "CreateTripsTable.sql"));
-        using var connection = new SqlConnection(CONNECTION_STRING);
+        var sqlQuery = File.ReadAllText(Path.Combine(_scriptsPath, "CreateTripsTable.sql"));
+        using var connection = new SqlConnection(_connectionString);
         connection.Open();
 
         using var command = new SqlCommand(sqlQuery, connection);

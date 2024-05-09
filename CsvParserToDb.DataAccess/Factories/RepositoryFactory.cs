@@ -6,6 +6,7 @@ public class RepositoryFactory : IRepositoryFactory
 {
     public ITripsRepository CreateTripsRepository()
     {
-        return new TripsRepository();
+        string connectionString = @"Server=(LocalDB)\MSSQLLocalDB;Database=TestTaskDb;Trusted_Connection=True;";
+        return new TripsRepository(connectionString);
     }
 }

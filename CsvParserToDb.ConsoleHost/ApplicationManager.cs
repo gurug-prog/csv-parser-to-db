@@ -5,10 +5,10 @@ namespace CsvParserToDb.ConsoleHost;
 
 public class ApplicationManager
 {
-    private readonly ITripsRepository _tripsRepository;
+    //private readonly ITripsRepository _tripsRepository;
 
-    public ApplicationManager(IRepositoryFactory repositoryFactory)
-    {
-        _tripsRepository = repositoryFactory.CreateTripsRepository();
-    }
+    //public ApplicationManager(IRepositoryFactory repositoryFactory)
+    //{
+    //    _tripsRepository = repositoryFactory.CreateTripsRepository();
+    //}
 }
