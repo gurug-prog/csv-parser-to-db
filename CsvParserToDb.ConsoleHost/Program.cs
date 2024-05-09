@@ -6,12 +6,18 @@ namespace CsvParserToDb.ConsoleHost;
 
 public class Program
 {
-    private const string inputFilePath = "";
-    private const string duplicatesFilePath = "";
+    private static readonly string baseDataDir =
+        Path.Combine(Directory.GetCurrentDirectory(), "..", "Data");
+    
+    private static readonly string inputFilePath =
+        Path.Combine(baseDataDir, "sample-cab-data.csv");
+    
+    private static readonly string duplicatesFilePath =
+        Path.Combine(baseDataDir, "duplicates.csv");
 
     public static async Task Main(string[] args)
     {
-        if (args[0] == "--initdb")
+        if (args.Length > 0 && args[0] == "--initdb")
         {
             var schemaBuilder = new SchemaBuilder();
             schemaBuilder.CreateDatabaseSchema();
@@ -25,6 +31,6 @@ public class Program
         var duplicatesCount = await applicationManager.RemoveDuplicates();
         var insertedRowsCount = await applicationManager.BulkInsertData(inputFilePath);
 
-        Console.WriteLine($"Successfully inserted {insertedRowsCount} processed rows.");
+        await Console.Out.WriteLineAsync($"Successfully inserted {insertedRowsCount} processed rows.");
     }
 }
