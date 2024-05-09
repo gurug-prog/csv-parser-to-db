@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <BCPFORMAT xmlns="http://schemas.microsoft.com/sqlserver/2004/bulkload/format" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <RECORD>
+  <RECORD>
     <FIELD ID="1" xsi:type="CharTerm" TERMINATOR="," MAX_LENGTH="30"/>
     <FIELD ID="2" xsi:type="CharTerm" TERMINATOR="," MAX_LENGTH="30"/>
     <FIELD ID="3" xsi:type="CharTerm" TERMINATOR="," MAX_LENGTH="30"/>
@@ -9,7 +9,7 @@
     <FIELD ID="6" xsi:type="CharTerm" TERMINATOR="," MAX_LENGTH="30"/>
     <FIELD ID="7" xsi:type="CharTerm" TERMINATOR="," MAX_LENGTH="30"/>
     <FIELD ID="8" xsi:type="CharTerm" TERMINATOR="," MAX_LENGTH="30"/>
-    <FIELD ID="9" xsi:type="CharTerm" TERMINATOR="\r\n" MAX_LENGTH="30"/>
+    <FIELD ID="9" xsi:type="CharTerm" TERMINATOR="\n" MAX_LENGTH="30"/>
   </RECORD>
   <ROW>
     <COLUMN SOURCE="1" NAME="tpep_pickup_datetime" xsi:type="SQLDATETIME2"/>

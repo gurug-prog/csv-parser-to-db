@@ -2,6 +2,7 @@
 using CsvParserToDb.DataAccess.Repositories;
 using CsvParserToDb.Domain.Factories;
 using CsvParserToDb.Domain.Services;
+using CsvParserToDb.Domain.Shared.Entities;
 
 namespace CsvParserToDb.ConsoleHost;
 
@@ -28,23 +29,23 @@ public class ApplicationManager
         return await _csvParserService.RemoveDuplicates(outputDuplicates);
     }
 
-    //public async Task<int> FindPuLocationIdWithHighestAvgTipAmount()
-    //{
+    public async Task<int> FindPuLocationIdWithHighestAvgTipAmount()
+    {
+        return await _tripsRepository.FindPuLocationIdWithHighestAvgTipAmount();
+    }
 
-    //}
+    public async Task<IEnumerable<double>> GetTopFaresByTripDistance(int topCount)
+    {
+        return await _tripsRepository.GetTopFaresByTripDistance(topCount);
+    }
 
-    //public async Task<IEnumerable<double>> GetTopFaresByTripDistance(int topCount)
-    //{
+    public async Task<IEnumerable<double>> GetTopFaresByTimeTravelling(int topCount)
+    {
+        return await _tripsRepository.GetTopFaresByTimeTravelling(topCount);
+    }
 
-    //}
-
-    //public async Task<IEnumerable<double>> GetTopFaresByTimeTravelling(int topCount)
-    //{
-
-    //}
-
-    //public async Task<IEnumerable<TripEntity>> Search(int puLocationId)
-    //{
-
-    //}
+    public async Task<IEnumerable<TripEntity>> Search(int puLocationId)
+    {
+        return await _tripsRepository.Search(puLocationId);
+    }
 }

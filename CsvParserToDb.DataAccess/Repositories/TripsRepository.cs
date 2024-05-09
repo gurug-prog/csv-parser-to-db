@@ -20,8 +20,21 @@ public class TripsRepository : ITripsRepository
             using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            var bulkInsertCommand = $@"
-                BULK INSERT Trips
+            var createViewNoPKQuery = @"
+                CREATE VIEW Trips_NoPK_View AS
+                    SELECT tpep_pickup_datetime,
+                      tpep_dropoff_datetime,
+                      passenger_count,
+                      trip_distance,
+                      store_and_fwd_flag,
+                      PULocationID,
+                      DOLocationID,
+                      fare_amount,
+                      tip_amount
+                    FROM Trips;";
+
+            var bulkInsertQuery = $@"
+                BULK INSERT Trips_NoPK_View
                 FROM '{Path.GetFullPath(csvFilePath)}'
                 WITH (
                     FORMATFILE = '{Path.GetFullPath(formatFile)}',
@@ -32,8 +45,16 @@ public class TripsRepository : ITripsRepository
                     KEEPNULLS
                 )";
 
-            using var command = new SqlCommand(bulkInsertCommand, connection);
-            result = await command.ExecuteNonQueryAsync();
+            var dropViewNoPKQuery = @"DROP VIEW Trips_NoPK_View;";
+
+            using var createViewCommand = new SqlCommand(createViewNoPKQuery, connection);
+            await createViewCommand.ExecuteNonQueryAsync();
+
+            using var bulkInsertCommand = new SqlCommand(bulkInsertQuery, connection);
+            result = await bulkInsertCommand.ExecuteNonQueryAsync();
+
+            using var dropViewCommand = new SqlCommand(dropViewNoPKQuery, connection);
+            await dropViewCommand.ExecuteNonQueryAsync();
         }
         catch (Exception ex)
         {
@@ -53,11 +74,10 @@ public class TripsRepository : ITripsRepository
             await connection.OpenAsync();
 
             var query = @"
-                SELECT PULocationID, AVG(tip_amount) AS AverageTip
+                SELECT TOP (1) PULocationID, AVG(tip_amount) AS AverageTip
                 FROM Trips
                 GROUP BY PULocationID
-                ORDER BY AverageTip DESC
-                LIMIT 1";
+                ORDER BY AverageTip DESC;";
 
             using var command = new SqlCommand(query, connection);
             using var reader = await command.ExecuteReaderAsync();
@@ -84,9 +104,9 @@ public class TripsRepository : ITripsRepository
             await connection.OpenAsync();
 
             var query = $@"
-                SELECT TOP {topCount} fare_amount
+                SELECT TOP ({topCount}) fare_amount
                 FROM Trips
-                ORDER BY trip_distance DESC";
+                ORDER BY trip_distance DESC;";
 
             using var command = new SqlCommand(query, connection);
             using var reader = await command.ExecuteReaderAsync();
@@ -114,8 +134,8 @@ public class TripsRepository : ITripsRepository
             await connection.OpenAsync();
 
             var query = $@"
-                SELECT TOP {topCount} fare_amount,
-                    DATEDIFF(MINUTE, tpep_pickup_datetime, tpep_dropoff_datetime) AS Duration
+                SELECT TOP ({topCount}) fare_amount,
+                    DATEDIFF(MILLISECOND, tpep_pickup_datetime, tpep_dropoff_datetime) AS Duration
                 FROM Trips
                 ORDER BY Duration DESC";
 
@@ -147,7 +167,7 @@ public class TripsRepository : ITripsRepository
             var query = @"
                 SELECT *
                 FROM Trips
-                WHERE PULocationID = @PULocationID";
+                WHERE PULocationID = @PULocationID;";
 
             using var command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@PULocationID", puLocationId);

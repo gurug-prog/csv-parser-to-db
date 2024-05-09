@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CsvParserToDb.DataAccess\CsvParserToDb.DataAccess.csproj" />
+    <ProjectReference Include="..\CsvParserToDb.Domain.Shared\CsvParserToDb.Domain.Shared.csproj" />
     <ProjectReference Include="..\CsvParserToDb.Domain\CsvParserToDb.Domain.csproj" />
   </ItemGroup>
 

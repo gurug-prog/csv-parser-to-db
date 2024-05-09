@@ -34,8 +34,14 @@ public class Program
         var domainServiceFactory = new DefaultDomainServiceFactory(inputFilePath);
         var appManager = new ApplicationManager(repositoryFactory, domainServiceFactory);
 
-        //var duplicatesCount = await appManager.RemoveDuplicates(duplicatesFilePath);
+        var duplicatesCount = await appManager.RemoveDuplicates(duplicatesFilePath);
         var insertedRowsCount = await appManager.BulkInsertData(inputFilePath, dataSchemaPath);
+
+        // Queries examples:
+        // var response1 = await appManager.FindPuLocationIdWithHighestAvgTipAmount();
+        // var response2 = await appManager.GetTopFaresByTripDistance(100);
+        // var response3 = await appManager.GetTopFaresByTimeTravelling(100);
+        // var response4 = await appManager.Search(238);
 
         await Console.Out.WriteLineAsync($"Successfully inserted {insertedRowsCount} processed rows.");
     }
