@@ -2,7 +2,7 @@
 
 namespace CsvParserToDb.DataAccess.Factories;
 
-public class RepositoryFactory : IRepositoryFactory
+public class DefaultRepositoryFactory : IRepositoryFactory
 {
     public ITripsRepository CreateTripsRepository()
     {

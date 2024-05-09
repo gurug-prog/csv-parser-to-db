@@ -5,28 +5,27 @@ using CsvParserToDb.Domain.Shared.Entities;
 
 namespace CsvParserToDb.Domain.Services;
 
-public class CsvParserService
+public class CsvParserDomainService
 {
+    private readonly IEqualityComparer<TripEntity> _comparer;
     private readonly HashSet<TripEntity> _uniqueRecords;
     private readonly List<TripEntity> _duplicateRecords;
-    private readonly IEqualityComparer<TripEntity> _comparer;
     private readonly string _datasetFilePath;
     private readonly string _duplicatesFilePath;
 
-    public CsvParserService(
+    public CsvParserDomainService(
         IEqualityComparer<TripEntity> comparer,
         string datasetFilePath,
         string duplicatesFilePath)
     {
-        _comparer = new TripDuplicateEqualityComparer();
-        //_comparer = comparer;
+        _comparer = comparer;
         _uniqueRecords = new(_comparer);
         _duplicateRecords = new();
         _datasetFilePath = datasetFilePath;
         _duplicatesFilePath = duplicatesFilePath;
     }
 
-    public void RemoveDuplicates()
+    public async Task<int> RemoveDuplicates()
     {
         using var reader = new StreamReader(_datasetFilePath);
         using var originalCsv = new CsvReader(reader,
@@ -35,9 +34,9 @@ public class CsvParserService
                 HeaderValidated = null,
                 MissingFieldFound = null
             });
-        var records = originalCsv.GetRecords<TripEntity>();
 
-        foreach (var record in records)
+        IAsyncEnumerable<TripEntity> records = originalCsv.GetRecordsAsync<TripEntity>();
+        await foreach (var record in records)
         {
             record.TpepDropoffDatetime = record.TpepDropoffDatetime.ToUniversalTime();
             record.TpepPickupDatetime = record.TpepPickupDatetime.ToUniversalTime();
@@ -54,14 +53,15 @@ public class CsvParserService
             }
         }
 
-        WriteToCsv(_duplicateRecords, _duplicatesFilePath);
-        WriteToCsv(_uniqueRecords, _datasetFilePath);
+        await WriteToCsv(_duplicateRecords, _duplicatesFilePath);
+        await WriteToCsv(_uniqueRecords, _datasetFilePath);
+        return _duplicateRecords.Count;
     }
 
-    private static void WriteToCsv<T>(IEnumerable<T> records, string filePath)
+    private static async Task WriteToCsv<T>(IEnumerable<T> records, string filePath)
     {
         using var writer = new StreamWriter(filePath);
         using var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture));
-        csv.WriteRecords(records);
+        await csv.WriteRecordsAsync(records);
     }
 }

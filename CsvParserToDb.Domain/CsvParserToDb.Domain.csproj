@@ -10,4 +10,9 @@
     <PackageReference Include="CsvHelper" Version="32.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CsvParserToDb.DataAccess\CsvParserToDb.DataAccess.csproj" />
+    <ProjectReference Include="..\CsvParserToDb.Domain.Shared\CsvParserToDb.Domain.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
