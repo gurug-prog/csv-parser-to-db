@@ -19,6 +19,6 @@ dotnet run --initdb
 ### Handling big CSV Files (over 10 GB size)
 You may consider these optimizations:
 - Split the file into smaller chunks for processing.
-- Implement more low-level parsing of data
+- Implement more low-level parsing of data to avoid loading and processing waste of data and just skip it.
 - Use a database engine with support for large-scale data processing, ensuring sufficient resources (CPU, memory, disk I/O).
-- Consider to develop parallel algorithm for of parsing and data aceess and use it with parallel processing or cloud-based distributed computing for faster operations.
+- Developing parallel algorithm for parsing and data access and use it with parallel processing or cloud-based distributed computing for faster operations.
